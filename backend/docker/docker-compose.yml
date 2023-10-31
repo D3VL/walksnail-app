@@ -1,0 +1,68 @@
+version: '3'
+
+services:
+  database:
+    container_name: walksnail-app-database
+    image: percona:ps-8.0
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3306:3306"
+    volumes:
+      - ./database:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_0900_ai_ci --authentication-policy=mysql_native_password --default-authentication-plugin=mysql_native_password --log_error_verbosity=1
+    cap_add: [ SYS_NICE ]
+    environment:
+      MYSQL_ROOT_PASSWORD: 'directus'
+      MYSQL_DATABASE: 'directus'
+      MYSQL_USER: 'directus'
+      MYSQL_PASSWORD: 'directus'
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "exit | mysql -h localhost -P 3306 -u root -p$$MYSQL_ROOT_PASSWORD"
+        ]
+      interval: 5s
+      timeout: 20s
+      retries: 30
+
+  directus:
+    container_name: walksnail-app-directus
+    image: directus/directus:10.7
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8055:8055"
+    volumes:
+      - ./uploads:/directus/uploads
+      - ./extensions:/directus/extensions
+    depends_on:
+      database:
+        condition: service_healthy
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:8055/server/health || exit 1
+      start_period: 15s
+      interval: 15s
+      timeout: 15s
+      retries: 3
+    environment:
+      KEY: '${DIRECTUS_KEY}'
+      SECRET: '${DIRECTUS_SECRET}'
+
+      TELEMETRY: false
+
+      DB_CLIENT: 'mysql'
+      DB_HOST: 'database'
+      DB_PORT: '3306'
+      DB_DATABASE: 'directus'
+      DB_USER: 'directus'
+      DB_PASSWORD: 'directus'
+      DB_CHARSET: 'utf8mb4'
+
+      ADMIN_EMAIL: 'jack@d3vl.com'
+      ADMIN_PASSWORD: 'password'
+
+      CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC: '''self'', data:, blob:, https://files.walksnail.app'
+      CONTENT_SECURITY_POLICY_DIRECTIVES__IMG_SRC: '''self'', data:, blob:, https://files.walksnail.app'
+
+      # Production 
+      PUBLIC_URL: 'https://cms.walksnail.app'

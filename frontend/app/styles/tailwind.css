@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.container {
+    @apply mx-auto max-w-screen-xl;
+}
+
+/* animate a border bottom widening from 0 to 100% width */
+.underline-hover {
+    @apply relative;
+}
+
+.underline-hover::after {
+    @apply absolute inset-x-0 -bottom-1 border-b-2 border-transparent border-[#ff3e3e];
+    content: "";
+    width: 0px;
+    left: 50%;
+    transition: all 0.1s ease-in-out;
+}
+
+.underline-hover:hover::after {
+    width: 100%;
+    left: 0;
+}
+
+.underline-hover.underline-active::after {
+    width: 100%;
+    left: 0;
+}
+
+:root {
+    --animation-btn: 0;
+}
+
+.fancy-list {
+    margin-left: 1rem;
+}
+
+.fancy-list li::before {
+    content: "–";
+    color: red;
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}

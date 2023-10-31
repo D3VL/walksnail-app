@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19 19">
+
+    <style>
+        .fill {
+            fill: #000;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .fill {
+                fill: #fff;
+            }
+        }
+    </style>
+
+    <g>
+        <rect width="7" height="10" x="0" y="0" ry="2" class="fill"></rect>
+        <rect width="7" height="6" x="0" y="12" ry="2" class="fill"></rect>
+        <rect width="9" height="10" x="9" y="8" ry="2" class="fill"></rect>
+        <rect width="9" height="6" x="9" y="0" ry="2" style="fill:#ff3e3e"></rect>
+    </g>
+</svg>
