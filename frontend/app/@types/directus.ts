@@ -395,10 +395,10 @@ export type FirmwareDownloads = {
 };
 
 export type FirmwareDownloadsLog = {
+    cache_hit: boolean;
     date_created?: string | null;
     firmware_downloads_id?: number | FirmwareDownloads | null;
     id: number;
-    ip_hash: string;
 };
 
 export type FirmwareVotes = {
