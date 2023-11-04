@@ -19,7 +19,19 @@ export default function () {
 
     return (
         <div className="container">
-            <style>{` nav,footer{display:none !important} `}</style>
+            <style>{` 
+                nav,
+                footer{
+                    display:none !important
+                } 
+
+                li span {
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    max-width: 870px;
+                }
+            `}</style>
 
             <svg xmlns="http://www.w3.org/2000/svg" height="60" viewBox="0 0 19 19" className="absolute top-6 right-6">
                 <g>
@@ -45,8 +57,10 @@ export default function () {
                     <RoundedCard className="relative mb-6 rounded-xl p-4" bg="bg-gray-700">
                         <img src="/assets/images/walking-snail-small-min.png" alt="walking snail" className=" w-24 absolute -top-20 right-6" />
                         <ul className="space-y-1">
-                            {release.changes.map((change: FirmwareChanges, i: number) =>
-                                <li className="text-3xl"><ChangelogItem key={i} type={change.type as any} description={change.description} className="text-2xl font-bold p-4 w-52 me-6" /></li>
+                            {release.changes.slice(0, 7).map((change: FirmwareChanges, i: number) =>
+                                <li className="text-3xl inline-flex">
+                                    <ChangelogItem key={i} type={change.type as any} description={change.description} className="text-2xl font-bold p-4 w-52 me-6" />
+                                </li>
                             )}
                         </ul>
                     </RoundedCard>
@@ -56,6 +70,7 @@ export default function () {
             <span className="text-2xl text-gray-500 absolute bottom-6 left-6">walksnail.app</span>
             <span className="text-2xl text-gray-500 absolute bottom-6 right-6">D3VL</span>
         </div>
+
 
     )
 }

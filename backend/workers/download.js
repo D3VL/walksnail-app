@@ -39,6 +39,13 @@ async function handleRequest(event) {
 
     // we need to notify app of the download event
     if (uuid && uuidRegex.test(uuid) && response.status === 200) {
+        // check the request isn't a range request, if it is, check if it starts at 0 or -n (n being any number) and if it does, return the response
+        const range = request.headers.get('range');
+        if (range && !(range.startsWith('bytes=0-') || range.startsWith('bytes=-'))) {
+            // this is a range request, but not starting from 0, we've likely already notified the app of the download
+            return response;
+        }
+
         // we need to notify app of the download event
         fetch('https://walksnail.app/api/track-download', {
             method: 'POST',
