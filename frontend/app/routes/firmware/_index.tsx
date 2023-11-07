@@ -14,10 +14,10 @@ export const meta: MetaFunction = () => {
     return [
         { title: "All Firmware Releases | Walksnail Hub" },
         { name: "description", content: "Our archive of all Walksnail and FatShark Avatar firmware releases, including private beta releases." },
-        { name: "og:image", content: "https://walksnail.app/assets/images/meta-image-firmware-list.jpg" },
+        { property: "og:image", content: "https://walksnail.app/assets/images/meta-image-firmware-list.jpg" },
         { name: "twitter:image", content: "https://walksnail.app/assets/images/meta-image-firmware-list.jpg" },
         { name: "twitter:card", content: "summary_large_image" },
-        { name: "og:type", content: "website" }
+        { property: "og:type", content: "website" }
     ];
 };
 

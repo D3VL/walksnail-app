@@ -43,6 +43,10 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [
         { title: post.title + " | Walksnail Hub Blog" },
         { name: "description", content: post.excerpt },
+        { property: "og:image", content: "https://walksnail.app/assets/images/meta-image-blog-posts.jpg" },
+        { name: "twitter:image", content: "https://walksnail.app/assets/images/meta-image-blog-posts.jpg" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { property: "og:type", content: "website" }
     ];
 };
 

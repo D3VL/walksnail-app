@@ -9,12 +9,20 @@ import DirectusImage, { DirectusImageParams } from "~/components/DirectusImage/D
 
 export const meta: MetaFunction = () => {
     return [
+        { name: "og:type", content: "website" },
+
         { title: "Walksnail Products | Walksnail Hub" },
+        { property: "og:title", content: "Walksnail Products | Walksnail Hub" },
+        { name: "twitter:title", content: "Walksnail Products | Walksnail Hub" },
+
         { name: "description", content: "Our curated list of Walksnail products." },
-        { name: "og:image", content: "https://walksnail.app/assets/images/meta-image-product-list.jpg" },
+        { property: "og:description", content: "Our curated list of Walksnail products." },
+        { name: "twitter:description", content: "Our curated list of Walksnail products." },
+
+        { property: "og:image", content: "https://walksnail.app/assets/images/meta-image-product-list.jpg" },
         { name: "twitter:image", content: "https://walksnail.app/assets/images/meta-image-product-list.jpg" },
         { name: "twitter:card", content: "summary_large_image" },
-        { name: "og:type", content: "website" }
+
     ];
 };
 
@@ -72,14 +80,14 @@ export default function () {
                                     <h3 className="text-xl font-bold">Features</h3>
                                     <ul className="fancy-list grid grid-cols-1 sm:grid-cols-3 md:grid-cols-2 p-2">
                                         {(product.features as string[]).map((feature: string, i: number) =>
-                                            <li key={i}>{feature}</li>
+                                            <li key={i}>{feature.replace('_', '')}</li>
                                         )}
                                     </ul>
                                 </div>
 
                                 <div className="col-span-2 md:col-span-1">
                                     <h3 className="text-xl font-bold">Purchase links</h3>
-                                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 p-2">
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 p-2 gap-4">
                                         {(product.links as any[]).map((link: any, i: number) =>
                                             <a target="_blank" rel="noreferrer" href={link.link} key={i} className="border-gray-700 border-[1px] p-2 rounded-lg relative hover:scale-105 transition-transform" title={link.retailer.name}>
                                                 {link.has_stock && <div className="w-1 h-1 absolute m-1 top-0 right-0 bg-success rounded-full" title="In Stock" />}
