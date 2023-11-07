@@ -10,10 +10,10 @@ export const meta: MetaFunction = () => {
     return [
         { title: "Blog posts | Walksnail Hub" },
         { name: "description", content: "Read our latest blog posts, tutorials and more." },
-        { name: "og:image", content: "https://walksnail.app/assets/images/meta-image-blog-posts.jpg" },
+        { property: "og:image", content: "https://walksnail.app/assets/images/meta-image-blog-posts.jpg" },
         { name: "twitter:image", content: "https://walksnail.app/assets/images/meta-image-blog-posts.jpg" },
         { name: "twitter:card", content: "summary_large_image" },
-        { name: "og:type", content: "website" }
+        { property: "og:type", content: "website" }
     ];
 };
 

@@ -16,10 +16,14 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [
         { title: `Firmware Release ${release.tag} | Walksnail Hub` },
         { name: "description", content: `Download Walksnail firmware version ${release.tag}.` },
-        { name: "og:image", content: `https://workers.walksnail.app/meta-image-render?tag=${release.tag}` },
+        { property: "og:title", content: `Firmware Release ${release.tag} | Walksnail Hub` },
+        { name: "twitter:title", content: `Firmware Release ${release.tag} | Walksnail Hub` },
+        { property: "og:description", content: `Download Walksnail firmware version ${release.tag}.` },
+        { name: "twitter:description", content: `Download Walksnail firmware version ${release.tag}.` },
+        { property: "og:image", content: `https://workers.walksnail.app/meta-image-render?tag=${release.tag}` },
         { name: "twitter:image", content: `https://workers.walksnail.app/meta-image-render?tag=${release.tag}` },
         { name: "twitter:card", content: "summary_large_image" },
-        { name: "og:type", content: "website" }
+        { property: "og:type", content: "website" }
     ];
 };
 
