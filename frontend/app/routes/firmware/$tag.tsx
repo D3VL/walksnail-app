@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Form, useLoaderData } from "@remix-run/react";
+import { Form, Link, useLoaderData } from "@remix-run/react";
 import DonateCTA from "~/components/DonateCTA/DonateCTA";
 import RoundedCard from "~/components/RoundedCard/RoundedCard";
 import directus from "~/utils/directus.server";
@@ -105,6 +105,18 @@ const downloadTypeMap = {
         name: 'Goggles X',
         icon: '/assets/images/goggles-x.svg'
     },
+    goggles_lite: {
+        name: 'Goggles Lite',
+        icon: '/assets/images/goggles-lite.svg'
+    },
+    moonlight_vtx: {
+        name: 'Moonlight VTX',
+        icon: '/assets/images/moonlight-vtx.svg'
+    },
+    userfont: {
+        name: 'Userfont',
+        icon: '/assets/images/userfont.svg'
+    },
     vrx: {
         name: 'VRX',
         icon: '/assets/images/vrx.svg'
@@ -127,8 +139,13 @@ const DownloadCard = (download: FirmwareDownloads) => {
     return (
         <RoundedCard className="flex flex-col gap-4 relative ">
             {type.icon && <img src={type.icon} alt="" className="absolute top-6 right-6 h-6" />}
-            <h4 className="text-lg font-bold">{download.name ?? type.name}</h4>
+            <div className="flex flex-col">
+                <h4 className="text-lg font-bold">{download.name ?? type.name}</h4>
+                {/* @ts-ignore - because this is a calculated field */}
+                <small className="text-gray-500">{(download?.logs_count ?? 0).toLocaleString('en-GB')} downloads</small>
+            </div>
             <a className="btn btn-sm w-full" href={`https://download.walksnail.app/${download.file.id}/${download.file.filename_download}?download`} download={true}>Download</a>
+
         </RoundedCard>
     )
 }
@@ -190,7 +207,10 @@ export default function () {
                     </RoundedCard>
 
                     <RoundedCard className="flex flex-col gap-4">
-                        <span className="text-xl text-center">How do you rate this firmware?</span>
+                        <div className="flex flex-col">
+                            <span className="text-xl text-center">How do you rate this firmware?</span>
+                            <small className="text-gray-500 text-center">Click on an emoji to vote!</small>
+                        </div>
                         <div className="flex gap-2 justify-center text-4xl lg:text-5xl">
                             <Form reloadDocument method="post" className="flex gap-2">
                                 <input type="hidden" name="type" value="poll" />
@@ -203,16 +223,24 @@ export default function () {
                         </div>
 
                         <div className="flex flex-col">
-                            <span className="w-full flex items-center gap-4">🔥 <progress className="progress progress-accent bg-gray-500 w-full" value={((votes['5'] ?? 0) / totalVotes) * 100} max="100"></progress></span>
-                            <span className="w-full flex items-center gap-4">😀 <progress className="progress progress-accent bg-gray-500 w-full" value={((votes['4'] ?? 0) / totalVotes) * 100} max="100"></progress></span>
-                            <span className="w-full flex items-center gap-4">🙂 <progress className="progress progress-accent bg-gray-500 w-full" value={((votes['3'] ?? 0) / totalVotes) * 100} max="100"></progress></span>
-                            <span className="w-full flex items-center gap-4">😒 <progress className="progress progress-accent bg-gray-500 w-full" value={((votes['2'] ?? 0) / totalVotes) * 100} max="100"></progress></span>
-                            <span className="w-full flex items-center gap-4">😤 <progress className="progress progress-accent bg-gray-500 w-full" value={((votes['1'] ?? 0) / totalVotes) * 100} max="100"></progress></span>
+                            <span className="w-full flex items-center gap-4" title={votes['5'] + ' Votes'}>🔥 <progress className="progress progress-accent bg-gray-500 w-full" value={((votes['5'] ?? 0) / totalVotes) * 100} max="100"></progress></span>
+                            <span className="w-full flex items-center gap-4" title={votes['4'] + ' Votes'}>😀 <progress className="progress progress-accent bg-gray-500 w-full" value={((votes['4'] ?? 0) / totalVotes) * 100} max="100"></progress></span>
+                            <span className="w-full flex items-center gap-4" title={votes['3'] + ' Votes'}>🙂 <progress className="progress progress-accent bg-gray-500 w-full" value={((votes['3'] ?? 0) / totalVotes) * 100} max="100"></progress></span>
+                            <span className="w-full flex items-center gap-4" title={votes['2'] + ' Votes'}>😒 <progress className="progress progress-accent bg-gray-500 w-full" value={((votes['2'] ?? 0) / totalVotes) * 100} max="100"></progress></span>
+                            <span className="w-full flex items-center gap-4" title={votes['1'] + ' Votes'}>😤 <progress className="progress progress-accent bg-gray-500 w-full" value={((votes['1'] ?? 0) / totalVotes) * 100} max="100"></progress></span>
 
                             <span className="text-xs text-gray-300">Based on {totalVotes.toLocaleString('en-GB')} votes</span>
                         </div>
                     </RoundedCard>
-                    <DonateCTA />
+
+                    <RoundedCard className="flex flex-col gap-4">
+                        <span>Need a new camera to replace that smashed one? Or maybe it's time for you to treat yourself with a new set of goggles&hellip;</span>
+                        <Link to="/products#allProducts" className="btn btn-accent">Shop Now</Link>
+                    </RoundedCard>
+
+                    <div className="hover:scale-105 transition-transform">
+                        <DonateCTA />
+                    </div>
                 </div>
             </div>
         </div>
