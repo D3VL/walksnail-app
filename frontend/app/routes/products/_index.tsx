@@ -46,6 +46,16 @@ interface CaddxProduct {
 }
 
 const caddx_product_url = 'https://caddxfpv.com/collections/walksnail-avatar-system/products.json';
+const caddx_product_collections = [
+    'receiver-unit',
+    'walksnail-1s-3s-vtx-kit',
+    'walksnail-single-antenna-version-kit',
+    'walksnail-dual-antennas-version-kit',
+    'walksnail-vtx-module',
+    'walksnail-all-accessories',
+    '19mm-camera',
+    '14mm-camera'
+]
 let caddx_product_cache = [] as CaddxProduct[];
 let caddx_product_cache_time = 0;
 
@@ -75,7 +85,15 @@ export const loader = async () => {
             try {
                 caddx_product_cache_time = Date.now(); // update cache time immediately to prevent multiple refreshes at the same time
 
-                const { products } = await fetch(caddx_product_url).then(res => res.json()) as { products: ShopifyProduct[] };
+                // const { products } = await fetch(caddx_product_url).then(res => res.json()) as { products: ShopifyProduct[] };
+
+                const products = await Promise.all(caddx_product_collections.map(async (collection) => {
+                    const response = await fetch(`https://caddxfpv.com/collections/${collection}/products.json`);
+                    return await response.json();
+                }))
+                    .then(res => res.reduce((acc, val) => acc.concat(val.products), []))
+                    .then(res => res.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)) as ShopifyProduct[];
+                //remove duplicates
 
                 // if we get an error or just no data, return early
                 if (!products) return;
@@ -92,7 +110,7 @@ export const loader = async () => {
                         updated_at: new Date(i.updated_at),
                         published_at: new Date(i.published_at),
                         images: i.images.map(j => j.src) ?? [],
-                        title: (i.title ?? "").replace("Walksnail", "").replace("Avatar", "").replace(" Version", "").trim(),
+                        title: (i.title ?? "").replace("Walksnail", "").replace("Avatar", "").replace(" Version", "").replace("HD", "").trim(),
                         slug: i.handle ?? "",
                         tags: i.tags ?? [],
                         is_available: i.variants.some(v => v.available) ?? false,
@@ -123,13 +141,13 @@ const filters = [
     {
         title: "Goggles",
         term: "goggles",
-        not_term: null,
+        not_term: "for",
         tag: "goggles"
     },
     {
         title: "Cameras",
         term: "camera",
-        not_term: null,
+        not_term: "vtx",
         tag: "camera"
     },
     {
@@ -149,6 +167,19 @@ const filters = [
         term: "mini",
         not_term: null,
         tag: "mini"
+    },
+    {
+        title: "Antennas",
+        term: "antenna",
+        not_term: null,
+        max_price: 50,
+        tag: "antennas"
+    },
+    {
+        title: "Parts",
+        term: "for",
+        not_term: "antenna",
+        tag: "parts"
     }
 ]
 
@@ -177,6 +208,10 @@ export default function () {
                     let filtered = caddxProducts.filter(p =>
                         (p.tags.join(" ").toLowerCase().split(" ").includes(filter.term) || p.title.toLowerCase().includes(filter.term)) &&
                         !(p.tags.join(" ").toLowerCase().split(" ").includes(filter.not_term) || p.title.toLowerCase().includes(filter.not_term)))
+
+                    if (filter.max_price) {
+                        filtered = filtered.filter(p => p.price.likely <= filter.max_price!);
+                    }
 
                     setFilteredCaddxProducts(filtered);
                 }
@@ -291,7 +326,7 @@ export default function () {
 
                 <div className="grid grid-cols-12 gap-6" >
                     {filteredCaddxProducts.map((product: CaddxProduct, i: number) => <>
-                        <Link to={`/products/${product.slug}`} target="_blank" rel="noreferrer" className="col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-3 h-full hover:scale-105 transition-transform">
+                        <Link to={`/products/${product.slug}`} target="_blank" rel="noreferrer" className="col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-3 h-full hover:scale-105 transition-transform peer">
                             <RoundedCard className="relative grid grid-cols-12 gap-4 h-full" key={i}>
                                 <div className="rounded-2xl col-span-12 max-h-40 md:max-h-52 lg:max-h-max overflow-hidden bg-white">
                                     <img src={product.images[0]} className="w-full h-full object-contain" alt={product.title} loading="lazy" />
