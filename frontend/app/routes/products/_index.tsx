@@ -48,10 +48,11 @@ interface CaddxProduct {
 const caddx_product_url = 'https://caddxfpv.com/collections/walksnail-avatar-system/products.json';
 const caddx_product_collections = [
     'receiver-unit',
-    'transmitter-unit',
+    'walksnail-1s-3s-vtx-kit',
+    'walksnail-single-antenna-version-kit',
     'walksnail-dual-antennas-version-kit',
-    'single-antenna-version-kit-2024',
-    '1s-3s-vtx-2024',
+    'walksnail-vtx-module',
+    'walksnail-all-accessories',
     '19mm-camera',
     '14mm-camera'
 ]
@@ -140,7 +141,7 @@ const filters = [
     {
         title: "Goggles",
         term: "goggles",
-        not_term: null,
+        not_term: "for",
         tag: "goggles"
     },
     {
@@ -166,6 +167,19 @@ const filters = [
         term: "mini",
         not_term: null,
         tag: "mini"
+    },
+    {
+        title: "Antennas",
+        term: "antenna",
+        not_term: null,
+        max_price: 50,
+        tag: "antennas"
+    },
+    {
+        title: "Parts",
+        term: "for",
+        not_term: "antenna",
+        tag: "parts"
     }
 ]
 
@@ -194,6 +208,10 @@ export default function () {
                     let filtered = caddxProducts.filter(p =>
                         (p.tags.join(" ").toLowerCase().split(" ").includes(filter.term) || p.title.toLowerCase().includes(filter.term)) &&
                         !(p.tags.join(" ").toLowerCase().split(" ").includes(filter.not_term) || p.title.toLowerCase().includes(filter.not_term)))
+
+                    if (filter.max_price) {
+                        filtered = filtered.filter(p => p.price.likely <= filter.max_price!);
+                    }
 
                     setFilteredCaddxProducts(filtered);
                 }
