@@ -1,3 +1,15 @@
+export type AppReleases = {
+    date_created?: string | null;
+    download: string | DirectusFiles;
+    id: number;
+    notes?: string | null;
+    release_date: string;
+    sort?: number | null;
+    status: string;
+    version_code: string;
+    version_name?: string | null;
+};
+
 export type Blog = {
     content: string;
     date_created?: string | null;
@@ -371,6 +383,7 @@ export type Firmware = {
     published: boolean;
     release_date: string;
     sort?: number | null;
+    system?: string | null;
     tag: string;
     tags: unknown;
     votes: any[] | FirmwareVotes[];
@@ -437,7 +450,16 @@ export type Retailers = {
     name: string;
 };
 
+export type Tools = {
+    id: number;
+    link: string;
+    sort?: number | null;
+    status: string;
+    title: string;
+};
+
 export type CustomDirectusTypes = {
+    app_releases: AppReleases[];
     blog: Blog[];
     directus_activity: DirectusActivity[];
     directus_collections: DirectusCollections[];
@@ -471,4 +493,5 @@ export type CustomDirectusTypes = {
     products: Products[];
     products_links: ProductsLinks[];
     retailers: Retailers[];
+    tools: Tools[];
 };

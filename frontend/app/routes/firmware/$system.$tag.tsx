@@ -8,20 +8,20 @@ import ChangelogItem from "~/components/ChangelogItem/ChangelogItem";
 import { FirmwareChanges, FirmwareDownloads } from "~/@types/directus";
 import FirmwareTag from "~/components/FirmwareTag/FirmwareTag";
 
-import { loader } from "~/routes/api/firmware.$tag"
-export { loader } from "~/routes/api/firmware.$tag"
+import { loader } from "~/routes/api/firmware.$system.$tag"
+export { loader } from "~/routes/api/firmware.$system.$tag"
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     const { release } = data;
     return [
-        { title: `Firmware Release ${release.tag} | Walksnail Hub` },
-        { name: "description", content: `Download Walksnail firmware version ${release.tag}.` },
-        { property: "og:title", content: `Firmware Release ${release.tag} | Walksnail Hub` },
-        { name: "twitter:title", content: `Firmware Release ${release.tag} | Walksnail Hub` },
-        { property: "og:description", content: `Download Walksnail firmware version ${release.tag}.` },
-        { name: "twitter:description", content: `Download Walksnail firmware version ${release.tag}.` },
-        { property: "og:image", content: `https://workers.walksnail.app/meta-image-render?tag=${release.tag}` },
-        { name: "twitter:image", content: `https://workers.walksnail.app/meta-image-render?tag=${release.tag}` },
+        { title: `${release.system} Firmware Release ${release.tag} | Walksnail Hub` },
+        { name: "description", content: `Download Walksnail ${release.system} firmware version ${release.tag}.` },
+        { property: "og:title", content: `${release.system} Firmware Release ${release.tag} | Walksnail Hub` },
+        { name: "twitter:title", content: `${release.system} Firmware Release ${release.tag} | Walksnail Hub` },
+        { property: "og:description", content: `Download Walksnail ${release.system} firmware version ${release.tag}.` },
+        { name: "twitter:description", content: `Download Walksnail ${release.system} firmware version ${release.tag}.` },
+        { property: "og:image", content: `https://workers.walksnail.app/meta-image-render?tag=${release.tag}&system=${release.system.toLowerCase()}` },
+        { name: "twitter:image", content: `https://workers.walksnail.app/meta-image-render?tag=${release.tag}&system=${release.system.toLowerCase()}` },
         { name: "twitter:card", content: "summary_large_image" },
         { property: "og:type", content: "website" }
     ];
@@ -166,6 +166,7 @@ export default function () {
                 <div className="col-span-12 xl:col-span-8 ">
 
                     <h1 className="text-7xl font-bold mb-4">{release.tag}</h1>
+                    <span className="text-xl text-gray-500 mb-6 block">Walksnail {release.system} system</span>
 
                     <div className="flex gap-1  mb-2">
                         {release.tags.map((tag: string, i: number) =>
@@ -182,7 +183,7 @@ export default function () {
                         {/* <div className="rounded-2xl bg-gray-700 px-3 py-2"> */}
                         <ul className="space-y-1">
                             {release.changes.map((change: FirmwareChanges, i: number) =>
-                                <li><ChangelogItem key={i} type={change.type as any} description={change.description} /></li>
+                                <li key={i}><ChangelogItem type={change.type as any} description={change.description} /></li>
                             )}
                         </ul>
                         {/* </div> */}
