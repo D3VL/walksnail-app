@@ -4,15 +4,14 @@ import ChangelogItem from "~/components/ChangelogItem/ChangelogItem";
 import { FirmwareChanges } from "~/@types/directus";
 import FirmwareTag from "~/components/FirmwareTag/FirmwareTag";
 
-import { loader } from "~/routes/api/firmware.$tag"
-export { loader } from "~/routes/api/firmware.$tag"
+import { loader } from "~/routes/api/firmware.$system.$tag"
+export { loader } from "~/routes/api/firmware.$system.$tag"
 
 
 export default function () {
 
     const {
         release,
-        totalVotes,
         votes
     } = useLoaderData<typeof loader>();
     if (!release || !votes) throw new Error("No page data found!");
@@ -50,7 +49,7 @@ export default function () {
 
                     <div className="flex gap-1 mb-4">
                         {release.tags.map((tag: string, i: number) =>
-                            <FirmwareTag type={tag as any} className="text-2xl me-2 font-bold p-4" />
+                            <FirmwareTag key={i} type={tag as any} className="text-2xl me-2 font-bold p-4" />
                         )}
                     </div>
 
@@ -58,7 +57,7 @@ export default function () {
                         <img src="/assets/images/walking-snail-small-min.png" alt="walking snail" className=" w-24 absolute -top-20 right-6" />
                         <ul className="space-y-1">
                             {release.changes.slice(0, 7).map((change: FirmwareChanges, i: number) =>
-                                <li className="text-3xl inline-flex">
+                                <li key={i} className="text-3xl inline-flex">
                                     <ChangelogItem key={i} type={change.type as any} description={change.description} className="text-2xl font-bold p-4 w-52 me-6" />
                                 </li>
                             )}

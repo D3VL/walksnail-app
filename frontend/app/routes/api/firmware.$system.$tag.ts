@@ -3,20 +3,25 @@ import directus from "~/utils/directus.server";
 import { readItems } from "@directus/sdk";
 import { ok } from "~/utils/loaderResponses.server";
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
     const tag = params?.tag;
     if (!tag) throw new Response(null, { status: 404 });
+
+    const system = params?.system;
+    if (!system) throw new Response(null, { status: 404 });
 
     const data = await directus.request(
         readItems('firmware', {
             filter: {
                 tag: { _eq: tag },
-                published: { _eq: true }
+                published: { _eq: true },
+                system: { _eq: system }
             },
             limit: 1,
             fields: [
                 'id',
+                'system',
                 'tag',
                 'tags',
                 'release_date',

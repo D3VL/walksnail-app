@@ -26,7 +26,8 @@ export const loader = async () => {
             readItems('firmware', {
                 filter: {
                     published: { _eq: true },
-                    tags: { _contains: 'Stable' }
+                    tags: { _contains: 'Stable' },
+                    system: { _eq: 'avatar' }
                 },
                 sort: ['-release_date'],
                 limit: 1,
@@ -73,12 +74,12 @@ export default function () {
 
                 <div className="grid grid-cols-2 gap-4 col-span-2 lg:col-span-1 mt-20 lg:mt-0">
                     <div className="flex flex-col col-span-2 md:col-span-1 gap-4">
-                        <Link to={`/firmware/${latestStableFirmware.tag}`}>
+                        <Link to={`/firmware/avatar/${latestStableFirmware.tag}`}>
                             <RoundedCard className="hover:rotate-1 hover:scale-105 transition-transform">
                                 <div className="flex flex-col gap-2">
                                     <h3 className="text-5xl font-bold">{latestStableFirmware.tag}</h3>
                                     <p className="text-accent font-bold">—</p>
-                                    <span className="uppercase font-bold">Latest Firmware</span>
+                                    <span className="uppercase font-bold">Latest Avatar Firmware</span>
                                     <span className="text-xs text-gray-300 font-bold">{new Date(latestStableFirmware.release_date).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                                     <div className="h-12"></div>
                                     <svg xmlns="http://www.w3.org/2000/svg" height={40} version="1.1" viewBox="0 0 24 18" className=" stroke-white stroke-2 self-end">
