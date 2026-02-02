@@ -92,8 +92,15 @@ export const loader = async () => {
                     const response = await fetch(`https://caddxfpv.com/collections/${collection}/products.json`);
                     return await response.json();
                 }))
-                    .then(res => res.reduce((acc, val) => acc.concat(val.products), []))
-                    .then(res => res.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)) as ShopifyProduct[];
+                    .then(res => res.reduce((acc, val) => acc.concat(val.products), []) as ShopifyProduct[])
+                    .then(res => res.map(product => { // clean titles
+                        product.title = product?.title.replace("Walksnail", "").replace("Avatar", "").replace(" Version", "").replace("HD", "").replace(" Only", "").trim() ?? '';
+                        return product;
+                    }))
+                    .then(res => res.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)) // remove duplicates by id
+                    .then(res => res.filter((v, i, a) => a.findIndex(t => (t.title === v.title)) === i)); // remove duplicates by title
+
+
                 //remove duplicates
 
                 // if we get an error or just no data, return early
@@ -111,7 +118,7 @@ export const loader = async () => {
                         updated_at: new Date(i.updated_at),
                         published_at: new Date(i.published_at),
                         images: i.images.map(j => j.src) ?? [],
-                        title: (i.title ?? "").replace("Walksnail", "").replace("Avatar", "").replace(" Version", "").replace("HD", "").trim(),
+                        title: (i.title ?? ""),
                         slug: i.handle ?? "",
                         tags: i.tags ?? [],
                         is_available: i.variants.some(v => v.available) ?? false,
