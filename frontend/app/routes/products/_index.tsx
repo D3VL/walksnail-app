@@ -48,6 +48,7 @@ interface CaddxProduct {
 const caddx_product_url = 'https://caddxfpv.com/collections/walksnail-avatar-system/products.json';
 const caddx_product_collections = [
     'receiver-unit',
+    'walksnail-all-product',
     'walksnail-1s-3s-vtx-kit',
     'walksnail-single-antenna-version-kit',
     'walksnail-dual-antennas-version-kit',
